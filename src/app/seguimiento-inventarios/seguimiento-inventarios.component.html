@@ -1,0 +1,54 @@
+<div>
+    <!-- Formulario para registrar nuevos movimientos de inventario -->
+    <form (ngSubmit)="registrarMovimiento()" #movimientoForm="ngForm">
+        <div>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" [(ngModel)]="nuevoMovimiento.fecha" required>
+        </div>
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" name="descripcion" [(ngModel)]="nuevoMovimiento.descripcion" required>
+        </div>
+        <div>
+            <label for="tipo">Tipo de Movimiento:</label>
+            <select id="tipo" name="tipo" [(ngModel)]="nuevoMovimiento.tipo" required>
+                <option value="Entrada">Entrada</option>
+                <option value="Salida">Salida</option>
+                <option value="Transferencia">Transferencia</option>
+                <!-- Agregar más opciones según sea necesario -->
+            </select>
+        </div>
+        <div>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" [(ngModel)]="nuevoMovimiento.cantidad" required>
+        </div>
+        <button type="submit" [disabled]="!movimientoForm.valid">Registrar Movimiento</button>
+    </form>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Tipo de Movimiento</th>
+                <th>Cantidad</th>
+                <!-- Se pueden agregar más columnas según sea necesario -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let movimiento of historialMovimientos">
+                <td>{{ movimiento.fecha }}</td>
+                <td>{{ movimiento.descripcion }}</td>
+                <td>{{ movimiento.tipo }}</td>
+                <td>{{ movimiento.cantidad }}</td>
+                <!-- Se pueden mostrar más detalles del movimiento si es necesario -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <!-- Aquí se pueden agregar botones u opciones para registrar nuevos movimientos de inventario -->
+</div>
