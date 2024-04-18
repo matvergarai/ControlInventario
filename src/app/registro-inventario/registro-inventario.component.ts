@@ -7,6 +7,7 @@ import { InventarioService } from '../inventario.service';
   templateUrl: './registro-inventario.component.html',
   styleUrls: ['./registro-inventario.component.scss'],
   providers: [FormBuilder]
+  
 })
 export class RegistroInventarioComponent implements OnInit {
   inventarioForm!: FormGroup;

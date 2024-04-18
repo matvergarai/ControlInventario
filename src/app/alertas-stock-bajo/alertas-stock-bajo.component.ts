@@ -4,7 +4,7 @@ import { InventarioService } from '../inventario.service';
 @Component({
   selector: 'app-alertas-stock-bajo',
   templateUrl: './alertas-stock-bajo.component.html',
-  styleUrls: ['./alertas-stock-bajo.component.css']
+  styleUrls: ['./alertas-stock-bajo.component.scss'] // Ajusta la extensión del archivo aquí
 })
 export class AlertasStockBajoComponent implements OnInit {
   alertasStockBajo: any[] = [];

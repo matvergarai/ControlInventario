@@ -1,24 +1,24 @@
 <form [formGroup]="inventarioForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="descripcion">Descripción:</label>
-      <input type="text" formControlName="descripcion">
-      <div *ngIf="inventarioForm.get('descripcion').invalid && inventarioForm.get('descripcion').touched">
-        La descripción es requerida.
-      </div>
+  <div>
+    <label for="descripcion">Descripción:</label>
+    <input type="text" formControlName="descripcion">
+    <div *ngIf="inventarioForm.get('descripcion')?.invalid && inventarioForm.get('descripcion')?.touched">
+      La descripción es requerida.
     </div>
-    <div>
-      <label for="numeroSerie">Número de Serie:</label>
-      <input type="text" formControlName="numeroSerie">
-      <div *ngIf="inventarioForm.get('numeroSerie').invalid && inventarioForm.get('numeroSerie').touched">
-        El número de serie es requerido.
-      </div>
+  </div>
+  <div>
+    <label for="numeroSerie">Número de Serie:</label>
+    <input type="text" formControlName="numeroSerie">
+    <div *ngIf="inventarioForm.get('numeroSerie')?.invalid && inventarioForm.get('numeroSerie')?.touched">
+      El número de serie es requerido.
     </div>
-    <div>
-      <label for="ubicacion">Ubicación:</label>
-      <input type="text" formControlName="ubicacion">
-      <div *ngIf="inventarioForm.get('ubicacion').invalid && inventarioForm.get('ubicacion').touched">
-        La ubicación es requerida.
-      </div>
+  </div>
+  <div>
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" formControlName="ubicacion">
+    <div *ngIf="inventarioForm.get('ubicacion')?.invalid && inventarioForm.get('ubicacion')?.touched">
+      La ubicación es requerida.
     </div>
-    <button type="submit" [disabled]="!inventarioForm.valid">Registrar</button>
-  </form>
+  </div>
+  <button type="submit" [disabled]="!inventarioForm.valid">Registrar</button>
+</form>

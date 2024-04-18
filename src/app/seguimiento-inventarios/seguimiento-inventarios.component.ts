@@ -4,7 +4,7 @@ import { InventarioService } from '../inventario.service';
 @Component({
   selector: 'app-seguimiento-inventarios',
   templateUrl: './seguimiento-inventarios.component.html',
-  styleUrls: ['./seguimiento-inventarios.component.css']
+  styleUrls: ['./seguimiento-inventarios.component.scss'] // Ajusta la extensión del archivo aquí
 })
 export class SeguimientoInventariosComponent implements OnInit {
   historialMovimientos: any[] = [];

@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'alertas-stock-bajo', component: AlertasStockBajoComponent },
   { path: 'registro-inventario', component: RegistroInventarioComponent },
-  { path: 'seguimiento-inventario', component: SeguimientoInventariosComponent },
+  { path: 'seguimiento-inventario', component: SeguimientoInventariosComponent }
 ];
 
 @NgModule({
