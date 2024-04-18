@@ -1,24 +1,25 @@
-<form [formGroup]="inventarioForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="inventarioForm" (ngSubmit)="onSubmit()" class="inventario-form">
   <div>
     <label for="descripcion">Descripción:</label>
     <input type="text" formControlName="descripcion">
-    <div *ngIf="inventarioForm.get('descripcion')?.invalid && inventarioForm.get('descripcion')?.touched">
-      La descripción es requerida.
+    <div *ngIf="inventarioForm.get('descripcion')?.invalid && inventarioForm.get('descripcion')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('descripcion')?.errors?.['required']">La descripción es requerida.</span>
+      <span *ngIf="inventarioForm.get('descripcion')?.errors?.['minlength']">La descripción debe tener al menos 3 caracteres.</span>
     </div>
   </div>
   <div>
     <label for="numeroSerie">Número de Serie:</label>
     <input type="text" formControlName="numeroSerie">
-    <div *ngIf="inventarioForm.get('numeroSerie')?.invalid && inventarioForm.get('numeroSerie')?.touched">
-      El número de serie es requerido.
+    <div *ngIf="inventarioForm.get('numeroSerie')?.invalid && inventarioForm.get('numeroSerie')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('numeroSerie')?.errors?.['required']">El número de serie es requerido.</span>
     </div>
   </div>
   <div>
     <label for="ubicacion">Ubicación:</label>
     <input type="text" formControlName="ubicacion">
-    <div *ngIf="inventarioForm.get('ubicacion')?.invalid && inventarioForm.get('ubicacion')?.touched">
-      La ubicación es requerida.
+    <div *ngIf="inventarioForm.get('ubicacion')?.invalid && inventarioForm.get('ubicacion')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('ubicacion')?.errors?.['required']">La ubicación es requerida.</span>
     </div>
   </div>
-  <button type="submit" [disabled]="!inventarioForm.valid">Registrar</button>
+  <button type="submit" [disabled]="!inventarioForm.valid || enviandoRegistro">Registrar</button>
 </form>

@@ -1,10 +1,31 @@
-<h1>{{ title }}</h1>
-<nav>
-  <ul>
-    <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/alertas-stock-bajo">Alertas Stock Bajo</a></li>
-    <li><a routerLink="/registro-inventario">Registro Inventario</a></li>
-    <li><a routerLink="/seguimiento-inventario">Seguimiento Inventario</a></li>
-  </ul>
-</nav>
-<router-outlet></router-outlet>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">AppInventarioMaestranzasUnidosSA</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/alertas-stock-bajo" routerLinkActive="active">Alertas de Stock Bajo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/registro-inventario" routerLinkActive="active">Registro de Inventario</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/seguimiento-inventario" routerLinkActive="active">Seguimiento de Inventario</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

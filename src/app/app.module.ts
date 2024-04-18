@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router'; // Importa RouterModule aquí
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule aquí
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -21,6 +23,8 @@ import { SeguimientoInventariosComponent } from './seguimiento-inventarios/segui
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule, // Agrega RouterModule aquí
+    BrowserAnimationsModule, // Agrega BrowserAnimationsModule aquí
     AppRoutingModule
   ],
   providers: [],
