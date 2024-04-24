@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Registro de Inventario</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="inventarioForm" (ngSubmit)="onSubmit()" class="inventario-form">
+
+      <!-- Descripción -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="descripcion">
+        <mat-error *ngIf="inventarioForm.get('descripcion')?.errors?.['required']">
+          La descripción es requerida.
+        </mat-error>
+        <mat-error *ngIf="inventarioForm.get('descripcion')?.errors?.['minlength']">
+          La descripción debe tener al menos 3 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Número de Serie -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Número de Serie</mat-label>
+        <input matInput formControlName="numeroSerie">
+        <mat-error *ngIf="inventarioForm.get('numeroSerie')?.errors?.['required']">
+          El número de serie es requerido.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Ubicación -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Ubicación</mat-label>
+        <input matInput formControlName="ubicacion">
+        <mat-error *ngIf="inventarioForm.get('ubicacion')?.errors?.['required']">
+          La ubicación es requerida.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!inventarioForm.valid || enviandoRegistro">
+        Registrar
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

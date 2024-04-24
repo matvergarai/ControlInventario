@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InventarioService } from '../inventario.service';
+import { InventarioService } from '../../service/inventario/inventario.service';
 
 @Component({
   selector: 'app-seguimiento-inventarios',

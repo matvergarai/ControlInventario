@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { InventarioService } from '../inventario.service';
+import { InventarioService } from '../../service/inventario/inventario.service';
 
 @Component({
   selector: 'app-registro-inventario',
   templateUrl: './registro-inventario.component.html',
   styleUrls: ['./registro-inventario.component.scss']
 })
+
 export class RegistroInventarioComponent implements OnInit {
   inventarioForm!: FormGroup;
   registroExitoso: boolean = false;

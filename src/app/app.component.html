@@ -9,23 +9,32 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
+            <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="openSpinner()">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/alertas-stock-bajo" routerLinkActive="active">Alertas de Stock Bajo</a>
+            <a class="nav-link" routerLink="/alertas-stock-bajo" routerLinkActive="active" (click)="openSpinner()">Alertas de Stock Bajo</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/registro-inventario" routerLinkActive="active">Registro de Inventario</a>
+            <a class="nav-link" routerLink="/registro-inventario" routerLinkActive="active" (click)="openSpinner()">Registro de Inventario</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/seguimiento-inventario" routerLinkActive="active">Seguimiento de Inventario</a>
+            <a class="nav-link" routerLink="/seguimiento-inventario" routerLinkActive="active" (click)="openSpinner()">Seguimiento de Inventario</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="openSpinner()">Ingresar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/profile" routerLinkActive="active" (click)="openSpinner()">Perfil</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 </header>
-
 <main>
-  <router-outlet></router-outlet>
+  <mat-card>
+    <mat-card-content>
+      <router-outlet></router-outlet>
+    </mat-card-content>
+  </mat-card>
 </main>
