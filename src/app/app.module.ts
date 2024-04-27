@@ -24,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatListModule } from '@angular/material/list';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,12 +47,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    MatProgressSpinner,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    MatProgressSpinnerModule,
     MatTableModule,
     MatSelectModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatSelect,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent, HomeComponent,AlertasStockBajoComponent,RegistroInventarioComponent,SeguimientoInventariosComponent,LoginComponent,UserprofileComponent]
