@@ -1,0 +1,54 @@
+/* Estilos para las tarjetas de Angular Material */
+mat-card {
+    margin-bottom: 20px; // Espacio entre las tarjetas
+    .mat-card-header {
+      background-color: #f5f5f5; // Fondo ligeramente gris para el encabezado
+      .mat-card-title {
+        font-size: 1.25rem; // Tamaño de letra más grande para el título
+      }
+    }
+    .mat-card-content {
+      padding: 20px; // Espaciado dentro del contenido de la tarjeta
+  
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; // Espacio entre los campos del formulario
+  
+        mat-form-field {
+          width: 100%; // Los campos de formulario ocupan todo el ancho
+  
+          input, mat-select {
+            width: 100%; // Los inputs y selects ocupan todo el ancho disponible
+          }
+        }
+  
+        button {
+          margin-top: 20px; // Espacio arriba del botón
+        }
+      }
+    }
+  }
+  
+  /* Estilos para las tablas de Angular Material */
+  table.mat-table {
+    width: 100%; // La tabla ocupa todo el ancho disponible
+  
+    .mat-header-cell, .mat-cell {
+      padding: 16px; // Espaciado adecuado dentro de las celdas
+    }
+  
+    .mat-header-row {
+      background-color: #e0e0e0; // Fondo para el encabezado de la tabla
+    }
+  
+    .mat-row {
+      &:nth-child(even) {
+        background-color: #f9f9f9; // Fondo alterno para las filas
+      }
+      &:hover {
+        background-color: #e8f4ff; // Fondo al pasar el ratón sobre las filas
+      }
+    }
+  }
+  

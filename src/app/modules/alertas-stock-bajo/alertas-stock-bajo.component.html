@@ -1,0 +1,28 @@
+<mat-card class="alertas-container">
+  <mat-card-header>
+    <mat-card-title>Alertas de Stock Bajo</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="alertasStockBajo.length > 0; else noAlertas">
+      <ul>
+        <li *ngFor="let alerta of alertasStockBajo">
+          <mat-card>
+            <mat-card-content>
+              <p>{{ alerta.descripcion }} - Nivel de stock: {{ alerta.nivelStock }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button (click)="generarOrdenReposicion(alerta)">Generar Orden de Reposición</button>
+            </mat-card-actions>
+          </mat-card>
+        </li>
+      </ul>
+    </div>
+    <ng-template #noAlertas>
+      <mat-card>
+        <mat-card-content>
+          <p>No hay alertas de stock bajo en este momento.</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
