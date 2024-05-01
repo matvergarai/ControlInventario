@@ -37,10 +37,11 @@ export class RegistroInventarioComponent implements OnInit {
           this.registroExitoso = false;
           this.errorRegistro = 'Ocurrió un error al registrar la pieza. Por favor, inténtelo de nuevo más tarde.';
           console.error('Error al registrar la pieza:', error);
+        },
+        () => {
+          this.enviandoRegistro = false;
         }
-      ).add(() => {
-        this.enviandoRegistro = false;
-      });
+      );
     } else {
       this.markFieldsAsTouched();
     }

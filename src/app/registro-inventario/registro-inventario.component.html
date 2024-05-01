@@ -16,7 +16,12 @@
   </div>
   <div>
     <label for="ubicacion">Ubicación:</label>
-    <input type="text" formControlName="ubicacion">
+    <select formControlName="ubicacion">
+      <option value="">Seleccione una ubicación</option>
+      <option value="Almacen 1">Almacen 1</option>
+      <option value="Almacen 2">Almacen 2</option>
+      <option value="Almacen 3">Almacen 3</option>
+    </select>
     <div *ngIf="inventarioForm.get('ubicacion')?.invalid && inventarioForm.get('ubicacion')?.touched" class="error-message">
       <span *ngIf="inventarioForm.get('ubicacion')?.errors?.['required']">La ubicación es requerida.</span>
     </div>
