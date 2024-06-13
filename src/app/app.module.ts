@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 
+import { AlertasStockBajoComponent } from './alertas-stock-bajo/alertas-stock-bajo.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { AlertasStockBajoComponent } from './alertas-stock-bajo/alertas-stock-bajo.component';
+//import { NivelesStockComponent } from './niveles-stock/niveles-stock.component';
 import { RegistroInventarioComponent } from './registro-inventario/registro-inventario.component';
 import { SeguimientoInventariosComponent } from './seguimiento-inventarios/seguimiento-inventarios.component';
-import { NivelesStockComponent } from './niveles-stock/niveles-stock.component';
 
 // Definición de las rutas
 const routes: Routes = [
@@ -31,7 +31,7 @@ const routes: Routes = [
     AlertasStockBajoComponent,
     RegistroInventarioComponent,
     SeguimientoInventariosComponent,
-    NivelesStockComponent
+    //NivelesStockComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +39,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    RouterModule,
     RouterModule.forRoot(routes) // Configuración del enrutador principal
   ],
   providers: [],
