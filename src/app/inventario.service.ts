@@ -38,4 +38,7 @@ export class InventarioService {
   actualizarNivelesStock(id: number, niveles: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/piezas/${id}/niveles-stock`, niveles);
   }
+  seguimientoInventario():Observable<any[]>{
+    return this.http.get<any>(`${this.apiUrl}/seguimiento-inventarios`);
+  }
 }

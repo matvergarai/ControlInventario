@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InventarioService } from '../inventario.service';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-seguimiento-inventarios',
@@ -10,10 +11,14 @@ export class SeguimientoInventariosComponent implements OnInit {
   historialMovimientos: any[] = [];
   nuevoMovimiento: any = {}; // Objeto para almacenar los datos del nuevo movimiento
 
-  constructor(private inventarioService: InventarioService) { }
+  constructor(private inventarioService: InventarioService, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.obtenerHistorialMovimientos();
+    this.loadingService.show();
+      setTimeout(() => {
+        this.loadingService.hide();
+      }, 2000);
   }
 
   obtenerHistorialMovimientos(): void {

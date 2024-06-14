@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventarioService } from '../inventario.service';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-registro-inventario',
@@ -13,7 +14,7 @@ export class RegistroInventarioComponent implements OnInit {
   errorRegistro: string = '';
   enviandoRegistro: boolean = false;
 
-  constructor(private fb: FormBuilder, private inventarioService: InventarioService) { }
+  constructor(private fb: FormBuilder, private inventarioService: InventarioService,private loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.inventarioForm = this.fb.group({
@@ -21,6 +22,10 @@ export class RegistroInventarioComponent implements OnInit {
       numeroSerie: ['', Validators.required],
       ubicacion: ['', Validators.required]
     });
+    this.loadingService.show();
+    setTimeout(() => {
+      this.loadingService.hide();
+    }, 1200);
   }
 
   onSubmit() {

@@ -9,8 +9,10 @@ import { AlertasStockBajoComponent } from './alertas-stock-bajo/alertas-stock-ba
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 //import { NivelesStockComponent } from './niveles-stock/niveles-stock.component';
+import { LoadingService } from './loading.service';
 import { RegistroInventarioComponent } from './registro-inventario/registro-inventario.component';
 import { SeguimientoInventariosComponent } from './seguimiento-inventarios/seguimiento-inventarios.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 // Definición de las rutas
 const routes: Routes = [
@@ -31,6 +33,7 @@ const routes: Routes = [
     AlertasStockBajoComponent,
     RegistroInventarioComponent,
     SeguimientoInventariosComponent,
+    SpinnerComponent
     //NivelesStockComponent
   ],
   imports: [
@@ -42,7 +45,7 @@ const routes: Routes = [
     RouterModule,
     RouterModule.forRoot(routes) // Configuración del enrutador principal
   ],
-  providers: [],
+  providers: [LoadingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

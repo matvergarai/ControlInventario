@@ -1,40 +1,65 @@
-/* Estilos para la barra de navegación */
-nav {
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+  }
+  /* Estilos para la barra de navegación */
+  nav {
     background-color: #2c3e50; /* Cambiamos el color de fondo a un tono más oscuro */
     padding: 10px 20px; /* Añadimos espaciado adicional a los extremos */
-}
+  }
 
-nav ul {
+  nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: space-between;
-}
+  }
 
-nav ul li {
+  nav ul li {
     display: inline;
-}
+    position: relative;
+  }
 
-nav ul li a {
+  nav ul li a {
     color: #ecf0f1; /* Cambiamos el color del texto a un tono más claro */
     text-decoration: none;
     padding: 10px 20px;
-    transition: background-color 0.3s; /* Agregamos una transición suave al cambio de color de fondo */
-}
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Agregamos una transición suave al cambio de color de fondo */
+    position: relative;
+  }
 
-nav ul li a:hover {
+  nav ul li a::before {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ecf0f1;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+
+  nav ul li a:hover::before {
+    visibility: visible;
+    width: 100%;
+  }
+
+  nav ul li a:hover {
     background-color: #34495e; /* Cambiamos el color de fondo al pasar el ratón a un tono más oscuro */
-}
+    color: #ffffff; /* Cambiamos el color del texto al pasar el ratón */
+    transform: scale(1.1); /* Agrandamos ligeramente el enlace al pasar el ratón */
+  }
 
-/* Estilos para el contenido principal */
-main {
+  /* Estilos para el contenido principal */
+  main {
     padding: 20px;
-}
+  }
 
-/* Estilos para el título */
-header h1 {
+  /* Estilos para el título */
+  header h1 {
     font-size: 28px; /* Aumentamos ligeramente el tamaño del título */
     margin-bottom: 20px;
     color: #2c3e50; /* Añadimos un color de texto para mayor contraste con el fondo */
-}
+  }

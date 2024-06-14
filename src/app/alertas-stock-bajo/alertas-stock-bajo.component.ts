@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InventarioService } from '../inventario.service';
-
+import { LoadingService } from '../loading.service';
 @Component({
   selector: 'app-alertas-stock-bajo',
   templateUrl: './alertas-stock-bajo.component.html',
@@ -9,10 +9,15 @@ import { InventarioService } from '../inventario.service';
 export class AlertasStockBajoComponent implements OnInit {
   alertasStockBajo: any[] = [];
 
-  constructor(private inventarioService: InventarioService) { }
+  constructor(private inventarioService: InventarioService, private loadingService:LoadingService) { }
 
   ngOnInit(): void {
     this.obtenerAlertasStockBajo();
+
+    this.loadingService.show();
+    setTimeout(() => {
+      this.loadingService.hide();
+    }, 1200)
   }
 
   obtenerAlertasStockBajo(): void {

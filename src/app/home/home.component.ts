@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'] // Cambia styleUrl a styleUrls
+  styleUrls: ['./home.component.scss']
 })
+export class HomeComponent implements OnInit {
+  constructor(private loadingService: LoadingService) {}
 
-export class HomeComponent {
-
+  ngOnInit(): void {
+    this.loadingService.show();
+    setTimeout(() => {
+      this.loadingService.hide();
+    }, 1200); // Simula un retraso de 2 segundos
+  }
 }
