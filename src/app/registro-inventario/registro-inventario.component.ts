@@ -1,3 +1,4 @@
+// registro-inventario.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventarioService } from '../inventario.service';
@@ -10,18 +11,26 @@ import { LoadingService } from '../loading.service';
 })
 export class RegistroInventarioComponent implements OnInit {
   inventarioForm!: FormGroup;
+  piezas: any[] = [];
+  piezasFiltradas: any[] = [];
+  searchTerm: string = '';
   registroExitoso: boolean = false;
   errorRegistro: string = '';
   enviandoRegistro: boolean = false;
+  piezaSeleccionada: any = null;
+  showModal: boolean = false;
 
-  constructor(private fb: FormBuilder, private inventarioService: InventarioService,private loadingService: LoadingService) { }
+  constructor(private fb: FormBuilder, private inventarioService: InventarioService, private loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.inventarioForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
       descripcion: ['', [Validators.required, Validators.minLength(3)]],
       numeroSerie: ['', Validators.required],
-      ubicacion: ['', Validators.required]
+      ubicacion: ['', Validators.required],
+      cantidad: [0, Validators.required]
     });
+    this.obtenerPiezas();
     this.loadingService.show();
     setTimeout(() => {
       this.loadingService.hide();
@@ -33,15 +42,15 @@ export class RegistroInventarioComponent implements OnInit {
       this.enviandoRegistro = true;
       this.inventarioService.registrarPieza(this.inventarioForm.value).subscribe(
         response => {
+          this.piezas.push(response);
+          this.inventarioForm.reset();
+          this.buscarPiezas();
           this.registroExitoso = true;
           this.errorRegistro = '';
-          console.log('Pieza registrada exitosamente:', response);
-          this.inventarioForm.reset();
         },
         error => {
           this.registroExitoso = false;
           this.errorRegistro = 'Ocurrió un error al registrar la pieza. Por favor, inténtelo de nuevo más tarde.';
-          console.error('Error al registrar la pieza:', error);
         },
         () => {
           this.enviandoRegistro = false;
@@ -58,8 +67,38 @@ export class RegistroInventarioComponent implements OnInit {
     });
   }
 
-  resetErrors() {
-    this.registroExitoso = false;
-    this.errorRegistro = '';
+  obtenerPiezas(): void {
+    this.inventarioService.obtenerPiezas().subscribe(piezas => {
+      this.piezas = piezas;
+      this.buscarPiezas();
+    });
+  }
+
+  editarPieza(pieza: any): void {
+    this.piezaSeleccionada = pieza;
+    this.showModal = true;
+  }
+  buscarPiezas(): void {
+    this.piezasFiltradas = this.piezas.filter(pieza =>
+      pieza._id.includes(this.searchTerm) || pieza.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  eliminarPieza(id: string): void {
+    this.inventarioService.eliminarPieza(id).subscribe(() => {
+      this.piezas = this.piezas.filter(pieza => pieza._id !== id);
+      this.buscarPiezas();
+    });
+  }
+  cerrarModal(): void {
+    this.showModal = false;
+  }
+
+  actualizarPiezaActualizada(piezaActualizada: any): void {
+    const index = this.piezas.findIndex(pieza => pieza._id === piezaActualizada._id);
+    if (index !== -1) {
+      this.piezas[index] = piezaActualizada;
+      this.buscarPiezas();
+    }
   }
 }

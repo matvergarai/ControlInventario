@@ -1,0 +1,65 @@
+<div class="container mt-5">
+  <h2>Lista de Elementos</h2>
+
+  <form [formGroup]="searchForm" class="mb-3">
+    <input type="text" formControlName="searchTerm" class="form-control" placeholder="Buscar por nombre, ID o descripción">
+  </form>
+
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Número de Serie</th>
+        <th>Ubicación</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pieza of piezasFiltradas">
+        <td>{{ pieza.nombre }}</td>
+        <td>{{ pieza.descripcion }}</td>
+        <td>{{ pieza.numeroSerie }}</td>
+        <td>{{ pieza.ubicacion }}</td>
+        <td>{{ pieza.cantidad }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="iniciarEdicion(pieza)">Editar</button>
+          <button class="btn btn-danger" (click)="eliminarPieza(pieza._id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="piezaEditando" class="mt-5">
+    <h3>Editar Pieza</h3>
+    <form [formGroup]="editForm" (ngSubmit)="guardarCambios()">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" formControlName="nombre" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" formControlName="descripcion" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="numeroSerie">Número de Serie:</label>
+        <input type="text" id="numeroSerie" formControlName="numeroSerie" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="ubicacion">Ubicación:</label>
+        <select id="ubicacion" formControlName="ubicacion" class="form-control">
+          <option value="Almacen 1">Almacen 1</option>
+          <option value="Almacen 2">Almacen 2</option>
+          <option value="Almacen 3">Almacen 3</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" formControlName="cantidad" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Guardar Cambios</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+    </form>
+  </div>
+</div>

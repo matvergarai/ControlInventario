@@ -13,6 +13,6 @@ export class HomeComponent implements OnInit {
     this.loadingService.show();
     setTimeout(() => {
       this.loadingService.hide();
-    }, 1200); // Simula un retraso de 2 segundos
+    }, 1050); // Simula un retraso de 2 segundos
   }
 }

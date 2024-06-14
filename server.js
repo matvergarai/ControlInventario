@@ -19,6 +19,7 @@ db.once('open', function() {
 
 // Definición de un modelo para el inventario
 const Pieza = mongoose.model('Pieza', {
+    cantidad: Number,
     descripcion: String,
     numeroSerie: String,
     ubicacion: String

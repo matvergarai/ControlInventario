@@ -1,38 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { InventarioService } from '../inventario.service';
-import { LoadingService } from '../loading.service';
+import { Articulo } from '../model/articulo.model';
+
 @Component({
   selector: 'app-alertas-stock-bajo',
   templateUrl: './alertas-stock-bajo.component.html',
-  styleUrls: ['./alertas-stock-bajo.component.scss'] // Ajusta la extensión del archivo aquí
+  styleUrls: ['./alertas-stock-bajo.component.scss']
 })
 export class AlertasStockBajoComponent implements OnInit {
-  alertasStockBajo: any[] = [];
+  alertasStockBajo: Articulo[] = [];
 
-  constructor(private inventarioService: InventarioService, private loadingService:LoadingService) { }
+  constructor(private inventarioService: InventarioService) { }
 
   ngOnInit(): void {
-    this.obtenerAlertasStockBajo();
-
-    this.loadingService.show();
-    setTimeout(() => {
-      this.loadingService.hide();
-    }, 1200)
-  }
-
-  obtenerAlertasStockBajo(): void {
-    this.inventarioService.obtenerAlertasStockBajo().subscribe(alertas => {
-      this.alertasStockBajo = alertas;
+    this.inventarioService.obtenerPiezasConBajoStock().subscribe(stock => {
+      this.alertasStockBajo = stock;
+      console.log('Piezas con bajo stock:', this.alertasStockBajo); // Verificar los datos
     });
   }
 
-  generarOrdenReposicion(alerta: any): void {
-    this.inventarioService.generarOrdenReposicion(alerta).subscribe(result => {
-      if (result) {
-        console.log('Orden de reposición generada con éxito.');
-        this.obtenerAlertasStockBajo();
-      } else {
-        console.error('Error al generar la orden de reposición.');
+  generarOrdenReposicion(articulo: Articulo): void {
+    const ordenCompra = {
+      id: articulo.id, // Asegúrate de enviar el id correcto
+      nombre: articulo.nombre,
+      cantidad: articulo.cantidad,
+      nivelMinimo: articulo.nivelMinimo,
+      ubicacion: articulo.ubicacion,
+    };
+
+    this.inventarioService.generarOrdenCompra(ordenCompra).subscribe({
+      next: (result) => {
+        console.log('Orden de reposición generada con éxito para', articulo.nombre);
+      },
+      error: (err) => {
+        console.error('Error al generar la orden de reposición para', articulo.nombre, err);
       }
     });
   }

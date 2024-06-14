@@ -3,9 +3,9 @@
 
   <div *ngIf="alertasStockBajo.length > 0; else noAlertas">
     <ul>
-      <li *ngFor="let alerta of alertasStockBajo">
-        <p>{{ alerta.descripcion }} - Nivel de stock: {{ alerta.nivelStock }}</p>
-        <button (click)="generarOrdenReposicion(alerta)">Generar Orden de Reposición</button>
+      <li *ngFor="let pieza of alertasStockBajo">
+        <p>{{ pieza.nombre }} - Nivel de stock: {{ pieza.cantidad }} - Ubicación: {{ pieza.ubicacion }}</p>
+        <button (click)="generarOrdenReposicion(pieza)">Generar Orden de Reposición</button>
       </li>
     </ul>
   </div>

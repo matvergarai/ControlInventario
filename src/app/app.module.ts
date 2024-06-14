@@ -4,16 +4,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-
+import { NgxEchartsModule } from 'ngx-echarts';
 import { AlertasStockBajoComponent } from './alertas-stock-bajo/alertas-stock-bajo.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-//import { NivelesStockComponent } from './niveles-stock/niveles-stock.component';
+
+import { AppRoutingModule } from './app-routing.module';
+import { EditarPiezaModalComponent } from './editar-pieza-modal/editar-pieza-modal/editar-pieza-modal.component';
+import { ListaElementosComponent } from './lista-elementos/lista-elementos.component';
 import { LoadingService } from './loading.service';
+import { StockNivelesComponent } from './nivelstock/nivel-stock.component'; // Asegúrate de importar el componente
 import { RegistroInventarioComponent } from './registro-inventario/registro-inventario.component';
+import { RegistrosAccionesComponent } from './registros-acciones/registros-acciones.component';
 import { SeguimientoInventariosComponent } from './seguimiento-inventarios/seguimiento-inventarios.component';
 import { SpinnerComponent } from './spinner/spinner.component';
-
 // Definición de las rutas
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,7 +37,12 @@ const routes: Routes = [
     AlertasStockBajoComponent,
     RegistroInventarioComponent,
     SeguimientoInventariosComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    EditarPiezaModalComponent,
+    ListaElementosComponent,
+    RegistrosAccionesComponent,
+    StockNivelesComponent 
+    
     //NivelesStockComponent
   ],
   imports: [
@@ -43,9 +52,14 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    RouterModule.forRoot(routes) // Configuración del enrutador principal
+    AppRoutingModule,
+    RouterModule.forRoot(routes),
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
+    
   ],
   providers: [LoadingService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

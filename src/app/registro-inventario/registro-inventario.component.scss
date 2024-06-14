@@ -1,47 +1,105 @@
-/* Estilos para el formulario de inventario */
-.inventario-form {
-    max-width: 400px; /* Ancho máximo del formulario */
-    margin: 0 auto; /* Centrar el formulario horizontalmente */
-    padding: 20px; /* Espaciado interno */
-    background-color: #f9f9f9; /* Color de fondo */
-    border: 1px solid #ddd; /* Borde */
-    border-radius: 5px; /* Bordes redondeados */
-}
-
-.inventario-form label {
-    display: block; /* Mostrar etiquetas en bloques para una mejor disposición */
-    margin-bottom: 5px; /* Espaciado inferior */
-}
-
-.inventario-form input {
-    width: calc(100% - 10px); /* Ancho del input */
-    padding: 8px; /* Espaciado interno */
-    margin-bottom: 10px; /* Espaciado inferior */
-    border: 1px solid #ccc; /* Borde */
-    border-radius: 3px; /* Bordes redondeados */
-}
-
-.inventario-form input:focus {
-    outline: none; /* Eliminar el contorno al enfocar */
-    border-color: #3498db; /* Cambiar el color del borde al enfocar */
-}
-
-.inventario-form .error-message {
-    color: #e74c3c; /* Color del mensaje de error */
-    font-size: 12px; /* Tamaño de fuente */
-    margin-top: 5px; /* Espaciado superior */
-}
-
-.inventario-form button {
-    background-color: #3498db; /* Color de fondo del botón */
-    color: #fff; /* Color del texto del botón */
-    border: none; /* Eliminar el borde */
-    padding: 10px 20px; /* Espaciado interno */
-    border-radius: 3px; /* Bordes redondeados */
-    cursor: pointer; /* Cambiar el cursor al pasar por encima */
-}
-
-.inventario-form button:disabled {
-    background-color: #ccc; /* Cambiar el color de fondo cuando está deshabilitado */
-    cursor: not-allowed; /* Cambiar el cursor cuando está deshabilitado */
-}
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  .inventario-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .inventario-form .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .inventario-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .inventario-form input,
+  .inventario-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .inventario-form input:focus,
+  .inventario-form select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+  }
+  
+  .inventario-form .error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+  }
+  
+  .inventario-form button {
+    background: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .inventario-form button[disabled] {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .mt-5,
+  .mt-3 {
+    margin-top: 3rem;
+  }
+  
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    border-collapse: collapse;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .table thead {
+    background: #007bff;
+    color: #fff;
+  }
+  
+  .table th,
+  .table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .table th:last-child,
+  .table td:last-child {
+    text-align: center;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  .table .form-control {
+    width: auto;
+    display: inline-block;
+  }
+  
+  .modal-backdrop.show {
+    opacity: 0.5;
+  }
+  

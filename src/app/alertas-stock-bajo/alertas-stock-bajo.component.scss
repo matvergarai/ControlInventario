@@ -1,40 +1,40 @@
-/* Estilos para las alertas de stock bajo */
 .alertas-container {
-    background-color: #f9f9f9; /* Color de fondo */
-    border: 1px solid #ddd; /* Borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 20px; /* Espaciado interno */
-    margin-bottom: 20px; /* Espaciado inferior */
-}
-
-.alertas-container h2 {
-    font-size: 20px; /* Tamaño del título */
-    color: #333; /* Color del texto */
-    margin-bottom: 10px; /* Espaciado inferior */
-}
-
-.alertas-container ul {
-    list-style-type: none; /* Elimina viñetas */
-    padding: 0; /* Elimina el relleno */
-}
-
-.alertas-container li {
-    margin-bottom: 15px; /* Espaciado inferior */
-}
-
-.alertas-container p {
-    margin: 0; /* Elimina el margen */
-}
-
-.alertas-container button {
-    background-color: #3498db; /* Color de fondo del botón */
-    color: #fff; /* Color del texto del botón */
-    border: none; /* Elimina el borde */
-    padding: 8px 15px; /* Espaciado interno */
-    border-radius: 3px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar por encima */
-}
-
-.alertas-container button:hover {
-    background-color: #2980b9; /* Cambia el color de fondo al pasar el ratón */
-}
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #343a40;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
