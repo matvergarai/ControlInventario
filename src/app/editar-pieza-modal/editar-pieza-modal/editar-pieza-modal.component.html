@@ -1,0 +1,43 @@
+<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showModal}" style="display: block;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Pieza</h5>
+          <button type="button" class="close" (click)="closeModal()">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" formControlName="nombre" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripción:</label>
+              <input type="text" id="descripcion" formControlName="descripcion" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="numeroSerie">Número de Serie:</label>
+              <input type="text" id="numeroSerie" formControlName="numeroSerie" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="ubicacion">Ubicación:</label>
+              <select id="ubicacion" formControlName="ubicacion" class="form-control">
+                <option value="Almacen 1">Almacen 1</option>
+                <option value="Almacen 2">Almacen 2</option>
+                <option value="Almacen 3">Almacen 3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cantidad">Cantidad:</label>
+              <input type="number" id="cantidad" formControlName="cantidad" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="editarForm.invalid">Guardar Cambios</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" [ngClass]="{'show': showModal}"></div>
+  

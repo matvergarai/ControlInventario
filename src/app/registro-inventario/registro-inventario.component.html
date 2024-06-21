@@ -1,0 +1,95 @@
+<form [formGroup]="inventarioForm" (ngSubmit)="onSubmit()" class="inventario-form">
+  <div class="form-group">
+    <label for="nombre">Nombre:</label>
+    <input type="text" formControlName="nombre" class="form-control">
+    <div *ngIf="inventarioForm.get('nombre')?.invalid && inventarioForm.get('nombre')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('nombre')?.errors?.['required']">El nombre es requerido.</span>
+      <span *ngIf="inventarioForm.get('nombre')?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="descripcion">Descripción:</label>
+    <input type="text" formControlName="descripcion" class="form-control">
+    <div *ngIf="inventarioForm.get('descripcion')?.invalid && inventarioForm.get('descripcion')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('descripcion')?.errors?.['required']">La descripción es requerida.</span>
+      <span *ngIf="inventarioForm.get('descripcion')?.errors?.['minlength']">La descripción debe tener al menos 3 caracteres.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="numeroSerie">Número de Serie:</label>
+    <input type="text" formControlName="numeroSerie" class="form-control">
+    <div *ngIf="inventarioForm.get('numeroSerie')?.invalid && inventarioForm.get('numeroSerie')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('numeroSerie')?.errors?.['required']">El número de serie es requerido.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" formControlName="cantidad" class="form-control">
+    <div *ngIf="inventarioForm.get('cantidad')?.invalid && inventarioForm.get('cantidad')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('cantidad')?.errors?.['required']">La cantidad es requerida.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="ubicacion">Ubicación:</label>
+    <select formControlName="ubicacion" class="form-control">
+      <option value="">Seleccione una ubicación</option>
+      <option value="Almacen 1">Almacen 1</option>
+      <option value="Almacen 2">Almacen 2</option>
+      <option value="Almacen 3">Almacen 3</option>
+    </select>
+    <div *ngIf="inventarioForm.get('ubicacion')?.invalid && inventarioForm.get('ubicacion')?.touched" class="error-message">
+      <span *ngIf="inventarioForm.get('ubicacion')?.errors?.['required']">La ubicación es requerida.</span>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="!inventarioForm.valid || enviandoRegistro">Registrar</button>
+</form>
+
+<div class="mt-5">
+  <h5>Buscar Piezas</h5>
+  <input type="text" class="form-control" placeholder="Buscar por ID o nombre" [(ngModel)]="searchTerm" (input)="buscarPiezas()">
+</div>
+
+<div class="mt-3">
+  <h5>Piezas Registradas</h5>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Número de Serie</th>
+        <th>Cantidad</th>
+        <th>Ubicación</th>
+        <th>Acciones</th>
+        <th>Stock</th> <!-- Nueva columna para alertas de stock -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pieza of piezasFiltradas">
+        <td>{{ pieza.nombre }}</td>
+        <td>{{ pieza.descripcion }}</td>
+        <td>{{ pieza.numeroSerie }}</td>
+        <td>{{ pieza.cantidad }}</td>
+        <td>{{ pieza.ubicacion }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="editarPieza(pieza)">Editar</button>
+          <button class="btn btn-danger" (click)="eliminarPieza(pieza._id)">Eliminar</button>
+        </td>
+        <td>
+          <ng-container *ngIf="pieza.cantidad < 5"> <!-- Suponiendo que 5 es el umbral de stock bajo -->
+            <span class="text-danger">Stock bajo</span>
+            <button class="btn btn-success" (click)="reabastecerStock(pieza)">Reabastecer</button>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Componente Modal -->
+<app-editar-pieza-modal
+  *ngIf="showModal"
+  [pieza]="piezaSeleccionada"
+  [showModal]="showModal"
+  (close)="cerrarModal()"
+  (update)="actualizarPiezaActualizada($event)"
+></app-editar-pieza-modal>

@@ -1,0 +1,20 @@
+.card-deck {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .card {
+    margin: 10px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card-body{
+    display: block;
+    box-shadow: 5px 7px 5px 5px;
+    border-radius: 5px;
+  }

@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="cantidad">Cantidad:</label>
+      <input type="number" [(ngModel)]="cantidad" name="cantidad" class="form-control" id="cantidad" required>
+    </div>
+    <div class="form-group">
+      <label for="almacen">Almacén:</label>
+      <select [(ngModel)]="almacenSeleccionado" name="almacenSeleccionado" class="form-control" id="almacen" required>
+        <option value="">Seleccione un almacén</option>
+        <option value="Almacen 1">Almacén 1</option>
+        <option value="Almacen 2">Almacén 2</option>
+        <option value="Almacen 3">Almacén 3</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Reabastecer</button>
+  </form>

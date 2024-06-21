@@ -1,0 +1,16 @@
+<div class="alertas-container">
+  <h2>Alertas de Stock Bajo</h2>
+
+  <div *ngIf="alertasStockBajo.length > 0; else noAlertas">
+    <ul>
+      <li *ngFor="let pieza of alertasStockBajo">
+        <p>{{ pieza.nombre }} - Nivel de stock: {{ pieza.cantidad }} - Ubicación: {{ pieza.ubicacion }}</p>
+        <button (click)="generarOrdenReposicion(pieza)">Generar Orden de Reposición</button>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noAlertas>
+    <p>No hay alertas de stock bajo en este momento.</p>
+  </ng-template>
+</div>
