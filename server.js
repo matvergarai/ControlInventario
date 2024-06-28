@@ -251,7 +251,7 @@ app.post('/api/exportar-reporte', (req, res) => {
             doc.fontSize(12).text(`Descripción: ${movimiento.descripcion}`);
             doc.fontSize(12).text(`Tipo: ${movimiento.tipo}`);
             doc.fontSize(12).text(`Cantidad: ${movimiento.cantidad}`);
-            doc.fontSize(12).text(`Pieza: ${movimiento.pieza.nombre}`);
+            
             doc.moveDown();
         });
 
@@ -264,8 +264,7 @@ app.post('/api/exportar-reporte', (req, res) => {
             { header: 'Fecha', key: 'fecha', width: 20 },
             { header: 'Descripción', key: 'descripcion', width: 30 },
             { header: 'Tipo', key: 'tipo', width: 20 },
-            { header: 'Cantidad', key: 'cantidad', width: 10 },
-            { header: 'Pieza', key: 'pieza', width: 20 }
+            { header: 'Cantidad', key: 'cantidad', width: 10 }
         ];
 
         datos.forEach(movimiento => {
@@ -273,8 +272,7 @@ app.post('/api/exportar-reporte', (req, res) => {
                 fecha: movimiento.fecha,
                 descripcion: movimiento.descripcion,
                 tipo: movimiento.tipo,
-                cantidad: movimiento.cantidad,
-                pieza: movimiento.pieza.nombre
+                cantidad: movimiento.cantidad
             });
         });
 
