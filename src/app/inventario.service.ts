@@ -60,8 +60,8 @@ export class InventarioService {
     return this.http.post(`${this.apiUrl}/reabastecer`, { almacen, cantidad });
   }
 
-  exportarReporte(formato: string, datos: any): Observable<Blob> {
-    return this.http.post(`${this.apiUrl}/exportar-reporte?formato=${formato}`, datos, { responseType: 'blob' });
+  exportarReporte(formato: string, datos: any[]): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/exportar-reporte`, { formato, datos }, { responseType: 'blob' });
   }
 
   obtenerPiezas(): Observable<any[]> {

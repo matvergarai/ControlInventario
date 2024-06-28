@@ -27,6 +27,16 @@
                     <label for="cantidad">Cantidad:</label>
                     <input type="number" id="cantidad" name="cantidad" class="form-control" [(ngModel)]="nuevoMovimiento.cantidad" required>
                 </div>
+                <div class="form-group">
+                    <label for="pieza">Pieza:</label>
+                    <input type="text" id="pieza" name="pieza" class="form-control" [(ngModel)]="piezaBusqueda" (input)="buscarPiezas()" required>
+                    <ul *ngIf="piezasFiltradas.length > 0" class="list-group">
+                        <li *ngFor="let pieza of piezasFiltradas" class="list-group-item" (click)="seleccionarPieza(pieza)">
+                            {{ pieza.nombre }}
+                        </li>
+                    </ul>
+                </div>
+                
                 <button type="submit" class="btn btn-primary" [disabled]="!movimientoForm.valid">Registrar Movimiento</button>
             </form>
             <div class="mt-3">
@@ -46,18 +56,23 @@
                     <th>Descripción</th>
                     <th>Tipo de Movimiento</th>
                     <th>Cantidad</th>
+                    <th>Pieza</th>
+                    
                     <!-- Se pueden agregar más columnas según sea necesario -->
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let movimiento of historialMovimientos">
-                    <td>{{ movimiento.fecha }}</td>
+                    <td>{{ movimiento.fecha | date: 'shortDate' }}</td>
                     <td>{{ movimiento.descripcion }}</td>
                     <td>{{ movimiento.tipo }}</td>
                     <td>{{ movimiento.cantidad }}</td>
+                    <td>{{ movimiento.pieza?.nombre }}</td>
+                    
                     <!-- Se pueden mostrar más detalles del movimiento si es necesario -->
                 </tr>
             </tbody>
+
         </table>
     </div>
 </div>
