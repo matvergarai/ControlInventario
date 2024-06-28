@@ -236,7 +236,37 @@ app.post('/api/exportar-reporte', (req, res) => {
     }
 });
 
+// Ruta para actualizar una pieza en el inventario
+app.put('/api/piezas/:id', (req, res) => {
+    const piezaId = req.params.id;
+    const actualizaciones = req.body;
 
+    Pieza.findByIdAndUpdate(piezaId, actualizaciones, { new: true })
+        .then(piezaActualizada => {
+            if (!piezaActualizada) {
+                return res.status(404).send({ message: 'Pieza no encontrada' });
+            }
+            res.status(200).send(piezaActualizada);
+        })
+        .catch(err => {
+            res.status(500).send({ error: err.message });
+        });
+});
+
+app.delete('/api/piezas/:id', (req, res) => {
+    const piezaId = req.params.id;
+
+    Pieza.findByIdAndDelete(piezaId)
+        .then(piezaEliminada => {
+            if (!piezaEliminada) {
+                return res.status(404).send({ message: 'Pieza no encontrada' });
+            }
+            res.status(200).send({ message: 'Pieza eliminada correctamente' });
+        })
+        .catch(err => {
+            res.status(500).send({ error: err.message });
+        });
+});
 
 // Iniciar el servidor
 app.listen(PORT, () => {
