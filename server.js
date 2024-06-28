@@ -49,6 +49,10 @@ const RegistroAccion = mongoose.model('RegistroAccion', {
 });
 
 function registrarAccion(accion, piezaId) {
+    if (!mongoose.Types.ObjectId.isValid(piezaId)) {
+        throw new Error('Invalid ObjectId');
+    }
+
     const nuevoRegistro = new RegistroAccion({
         accion: accion,
         pieza: piezaId,
@@ -181,8 +185,15 @@ app.post('/api/reabastecer', (req, res) => {
             if (result.modifiedCount === 0) {
                 return res.status(404).send({ message: 'Almacén no encontrado o sin cambios en la cantidad.' });
             }
-            registrarAccion('Reabastecer', almacen); // Registrar la acción
-            res.status(200).send({ success: true, message: 'Stock reabastecido correctamente.' });
+            // Asegúrate de pasar un ObjectId válido aquí
+            Pieza.findOne({ ubicacion: almacen })
+                .then(pieza => {
+                    if (!pieza) {
+                        return res.status(404).send({ message: 'Pieza no encontrada' });
+                    }
+                    registrarAccion('Reabastecer', pieza._id); // Registrar la acción
+                    res.status(200).send({ success: true, message: 'Stock reabastecido correctamente.' });
+                });
         })
         .catch(err => {
             res.status(500).send({ error: err.message });
@@ -191,7 +202,7 @@ app.post('/api/reabastecer', (req, res) => {
 
 app.get('/api/historial-movimientos', (req, res) => {
     MovimientoInventario.find({})
-        .populate('pieza')
+        .populate('pieza', 'nombre') // Poblar el campo 'nombre' de la pieza
         .exec()
         .then(movimientos => {
             res.status(200).send(movimientos);
@@ -240,6 +251,7 @@ app.post('/api/exportar-reporte', (req, res) => {
             doc.fontSize(12).text(`Descripción: ${movimiento.descripcion}`);
             doc.fontSize(12).text(`Tipo: ${movimiento.tipo}`);
             doc.fontSize(12).text(`Cantidad: ${movimiento.cantidad}`);
+            doc.fontSize(12).text(`Pieza: ${movimiento.pieza.nombre}`);
             doc.moveDown();
         });
 
@@ -252,7 +264,8 @@ app.post('/api/exportar-reporte', (req, res) => {
             { header: 'Fecha', key: 'fecha', width: 20 },
             { header: 'Descripción', key: 'descripcion', width: 30 },
             { header: 'Tipo', key: 'tipo', width: 20 },
-            { header: 'Cantidad', key: 'cantidad', width: 10 }
+            { header: 'Cantidad', key: 'cantidad', width: 10 },
+            { header: 'Pieza', key: 'pieza', width: 20 }
         ];
 
         datos.forEach(movimiento => {
@@ -260,7 +273,8 @@ app.post('/api/exportar-reporte', (req, res) => {
                 fecha: movimiento.fecha,
                 descripcion: movimiento.descripcion,
                 tipo: movimiento.tipo,
-                cantidad: movimiento.cantidad
+                cantidad: movimiento.cantidad,
+                pieza: movimiento.pieza.nombre
             });
         });
 
