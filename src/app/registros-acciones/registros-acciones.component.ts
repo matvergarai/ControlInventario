@@ -18,6 +18,7 @@ export class RegistrosAccionesComponent implements OnInit {
   obtenerRegistrosAcciones(): void {
     this.inventarioService.obtenerRegistrosAcciones().subscribe(
       registros => {
+        console.log('Registros recibidos:', registros); // Log para verificar los datos recibidos
         this.registros = registros;
       },
       error => {

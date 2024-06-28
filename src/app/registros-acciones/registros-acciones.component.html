@@ -1,22 +1,21 @@
 <div class="container mt-5">
-    <h2>Registro de Acciones</h2>
-    <table class="table table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th>Acción</th>
-          <th>Nombre del Producto</th>
-          <th>Descripción</th>
-          <th>Fecha</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let registro of registros">
-          <td>{{ registro.accion }}</td>
-          <td>{{ registro.pieza?.nombre || 'N/A' }}</td>
-          <td>{{ registro.pieza?.descripcion || 'N/A' }}</td>
-          <td>{{ registro.fecha | date:'medium' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+  <h2>Registro de Acciones</h2>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Acción</th>
+        <th>Nombre del Producto</th>
+        <th>Descripción</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let registro of registros">
+        <td>{{ registro.accion }}</td>
+        <td>{{ registro.pieza?.nombre || 'N/A' }}</td>
+        <td>{{ registro.pieza?.descripcion || 'N/A' }}</td>
+        <td>{{ registro.fecha | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

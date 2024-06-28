@@ -7,11 +7,9 @@ const ExcelJS = require('exceljs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de bodyParser para analizar solicitudes JSON
 app.use(bodyParser.json());
 app.use(cors());
 
-// Conexión a la base de datos MongoDB
 mongoose.connect('mongodb://localhost:27017/inventario', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error de conexión a MongoDB:'));
@@ -19,7 +17,6 @@ db.once('open', function() {
     console.log('Conexión exitosa a la base de datos MongoDB');
 });
 
-// Definición de un modelo para el inventario
 const Pieza = mongoose.model('Pieza', {
     nombre: String,
     cantidad: Number,
@@ -37,7 +34,6 @@ const OrdenReposicion = mongoose.model('OrdenReposicion', {
     estado: String
 });
 
-// Definición de un modelo para los movimientos de inventario
 const MovimientoInventario = mongoose.model('MovimientoInventario', {
     pieza: { type: mongoose.Schema.Types.ObjectId, ref: 'Pieza' },
     fecha: Date,
@@ -46,7 +42,22 @@ const MovimientoInventario = mongoose.model('MovimientoInventario', {
     cantidad: Number
 });
 
-// Ruta para obtener todas las piezas en el inventario
+const RegistroAccion = mongoose.model('RegistroAccion', {
+    accion: String,
+    pieza: { type: mongoose.Schema.Types.ObjectId, ref: 'Pieza' },
+    fecha: Date
+});
+
+function registrarAccion(accion, piezaId) {
+    const nuevoRegistro = new RegistroAccion({
+        accion: accion,
+        pieza: piezaId,
+        fecha: new Date()
+    });
+
+    return nuevoRegistro.save();
+}
+
 app.get('/api/piezas', (req, res) => {
     Pieza.find({})
         .then(piezas => {
@@ -57,11 +68,11 @@ app.get('/api/piezas', (req, res) => {
         });
 });
 
-// Ruta para registrar una nueva pieza en el inventario
 app.post('/api/piezas', (req, res) => {
     const nuevaPieza = new Pieza(req.body);
     nuevaPieza.save()
         .then(piezaGuardada => {
+            registrarAccion('Registrar', piezaGuardada._id); // Registrar la acción
             res.status(201).send(piezaGuardada);
         })
         .catch(err => {
@@ -69,7 +80,6 @@ app.post('/api/piezas', (req, res) => {
         });
 });
 
-// Ruta para actualizar una pieza en el inventario
 app.put('/api/piezas/:id', (req, res) => {
     const piezaId = req.params.id;
     const actualizaciones = req.body;
@@ -79,6 +89,7 @@ app.put('/api/piezas/:id', (req, res) => {
             if (!piezaActualizada) {
                 return res.status(404).send({ message: 'Pieza no encontrada' });
             }
+            registrarAccion('Actualizar', piezaActualizada._id); // Registrar la acción
             res.status(200).send(piezaActualizada);
         })
         .catch(err => {
@@ -86,7 +97,6 @@ app.put('/api/piezas/:id', (req, res) => {
         });
 });
 
-// Ruta para eliminar una pieza en el inventario
 app.delete('/api/piezas/:id', (req, res) => {
     const piezaId = req.params.id;
 
@@ -95,6 +105,7 @@ app.delete('/api/piezas/:id', (req, res) => {
             if (!piezaEliminada) {
                 return res.status(404).send({ message: 'Pieza no encontrada' });
             }
+            registrarAccion('Eliminar', piezaEliminada._id); // Registrar la acción
             res.status(200).send({ message: 'Pieza eliminada correctamente' });
         })
         .catch(err => {
@@ -102,7 +113,6 @@ app.delete('/api/piezas/:id', (req, res) => {
         });
 });
 
-// Ruta para obtener piezas con bajo stock
 app.get('/api/piezas/bajo-stock', (req, res) => {
     Pieza.find({ cantidad: { $lt: 10 }, ordenReposicionPendiente: { $ne: true } })
         .then(piezas => {
@@ -113,7 +123,6 @@ app.get('/api/piezas/bajo-stock', (req, res) => {
         });
 });
 
-// Ruta para obtener todas las órdenes de reposición
 app.get('/api/ordenes-reposicion', (req, res) => {
     OrdenReposicion.find({})
         .then(ordenes => {
@@ -124,7 +133,6 @@ app.get('/api/ordenes-reposicion', (req, res) => {
         });
 });
 
-// Ruta para agregar una nueva orden de reposición
 app.post('/api/ordenes-reposicion', async (req, res) => {
     console.log('Received data for order:', req.body);
     const { idPieza, cantidadRequerida } = req.body;
@@ -135,7 +143,6 @@ app.post('/api/ordenes-reposicion', async (req, res) => {
             return res.status(404).send({ message: 'Pieza no encontrada' });
         }
 
-        // Crear la nueva orden de reposición
         const nuevaOrdenCompra = {
             nombre: pieza.nombre,
             cantidad: cantidadRequerida,
@@ -144,21 +151,19 @@ app.post('/api/ordenes-reposicion', async (req, res) => {
             estado: 'Pendiente'
         };
 
-        // Guardar la orden de reposición
         const ordenGuardada = new OrdenReposicion(nuevaOrdenCompra);
         await ordenGuardada.save();
 
-        // Actualizar el estado de la pieza
         pieza.ordenReposicionPendiente = true;
         await pieza.save();
 
+        registrarAccion('Orden de Reposición', pieza._id); // Registrar la acción
         res.status(201).send({ success: true, ordenCompra: nuevaOrdenCompra });
     } catch (err) {
         res.status(500).send({ error: err.message });
     }
 });
 
-// Ruta para eliminar todas las órdenes de reposición
 app.delete('/api/ordenes-reposicion', async (req, res) => {
     try {
         await OrdenReposicion.deleteMany({});
@@ -168,7 +173,6 @@ app.delete('/api/ordenes-reposicion', async (req, res) => {
     }
 });
 
-// Ruta para reabastecer stock
 app.post('/api/reabastecer', (req, res) => {
     const { almacen, cantidad } = req.body;
 
@@ -177,6 +181,7 @@ app.post('/api/reabastecer', (req, res) => {
             if (result.modifiedCount === 0) {
                 return res.status(404).send({ message: 'Almacén no encontrado o sin cambios en la cantidad.' });
             }
+            registrarAccion('Reabastecer', almacen); // Registrar la acción
             res.status(200).send({ success: true, message: 'Stock reabastecido correctamente.' });
         })
         .catch(err => {
@@ -184,11 +189,9 @@ app.post('/api/reabastecer', (req, res) => {
         });
 });
 
-// Ruta para obtener el historial de movimientos del inventario
-// Ruta para obtener el historial de movimientos del inventario
 app.get('/api/historial-movimientos', (req, res) => {
     MovimientoInventario.find({})
-        .populate('pieza') // Popula la referencia a la pieza
+        .populate('pieza')
         .exec()
         .then(movimientos => {
             res.status(200).send(movimientos);
@@ -198,7 +201,6 @@ app.get('/api/historial-movimientos', (req, res) => {
         });
 });
 
-// Ruta para registrar un nuevo movimiento de inventario
 app.post('/api/registrar-movimiento', (req, res) => {
     if (!req.body.pieza || !req.body.pieza._id) {
         return res.status(400).send({ error: 'Pieza no especificada o ID de pieza faltante' });
@@ -206,11 +208,12 @@ app.post('/api/registrar-movimiento', (req, res) => {
 
     const nuevoMovimiento = new MovimientoInventario({
         ...req.body,
-        pieza: req.body.pieza._id // Asegúrate de que el ID de la pieza se pase correctamente
+        pieza: req.body.pieza._id
     });
 
     nuevoMovimiento.save()
         .then(movimientoGuardado => {
+            registrarAccion('Mover', movimientoGuardado.pieza); // Registrar la acción
             res.status(201).send(movimientoGuardado);
         })
         .catch(err => {
@@ -218,8 +221,6 @@ app.post('/api/registrar-movimiento', (req, res) => {
         });
 });
 
-// Ruta para exportar datos a PDF o Excel
-// Ruta para exportar datos a PDF o Excel
 app.post('/api/exportar-reporte', (req, res) => {
     const { formato, datos } = req.body;
 
@@ -239,7 +240,6 @@ app.post('/api/exportar-reporte', (req, res) => {
             doc.fontSize(12).text(`Descripción: ${movimiento.descripcion}`);
             doc.fontSize(12).text(`Tipo: ${movimiento.tipo}`);
             doc.fontSize(12).text(`Cantidad: ${movimiento.cantidad}`);
-            doc.fontSize(12).text(`Pieza: ${movimiento.pieza.nombre}`); // Include the "pieza" information
             doc.moveDown();
         });
 
@@ -252,8 +252,7 @@ app.post('/api/exportar-reporte', (req, res) => {
             { header: 'Fecha', key: 'fecha', width: 20 },
             { header: 'Descripción', key: 'descripcion', width: 30 },
             { header: 'Tipo', key: 'tipo', width: 20 },
-            { header: 'Cantidad', key: 'cantidad', width: 10 },
-            { header: 'Pieza', key: 'pieza', width: 30 } // Include the "pieza" column
+            { header: 'Cantidad', key: 'cantidad', width: 10 }
         ];
 
         datos.forEach(movimiento => {
@@ -261,8 +260,7 @@ app.post('/api/exportar-reporte', (req, res) => {
                 fecha: movimiento.fecha,
                 descripcion: movimiento.descripcion,
                 tipo: movimiento.tipo,
-                cantidad: movimiento.cantidad,
-                pieza: movimiento.pieza.nombre // Include the "pieza" information
+                cantidad: movimiento.cantidad
             });
         });
 
@@ -278,7 +276,18 @@ app.post('/api/exportar-reporte', (req, res) => {
     }
 });
 
-// Iniciar el servidor
+app.get('/api/registros-acciones', (req, res) => {
+    RegistroAccion.find({})
+        .populate('pieza', 'nombre descripcion') // Poblar solo los campos 'nombre' y 'descripcion'
+        .exec()
+        .then(registros => {
+            res.status(200).send(registros);
+        })
+        .catch(err => {
+            res.status(500).send({ error: err.message });
+        });
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor Express escuchando en el puerto ${PORT}`);
 });
