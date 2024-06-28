@@ -16,7 +16,7 @@ export class OrdenesReposicionComponent implements OnInit {
 
   ngOnInit(): void {
     // Emitir valores cada 10 segundos y actualizar la lista de órdenes
-    interval(1000).pipe(
+    interval(10).pipe(
       switchMap(() => this.inventarioService.obtenerOrdenesReposicion())
     ).subscribe(ordenes => {
       this.ordenesReposicion = ordenes;

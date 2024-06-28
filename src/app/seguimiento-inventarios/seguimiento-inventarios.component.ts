@@ -78,15 +78,21 @@ export class SeguimientoInventariosComponent implements OnInit {
   }
 
   exportarReporte(formato: string): void {
-    this.inventarioService.exportarReporte(formato, this.historialMovimientos).subscribe(blob => {
-      const a = document.createElement('a');
-      const objectUrl = URL.createObjectURL(blob);
-      a.href = objectUrl;
-      a.download = `reporte_movimientos.${formato}`;
-      a.click();
-      URL.revokeObjectURL(objectUrl);
-    }, error => {
-      console.error('Error al exportar el reporte:', error);
-    });
-  }
+    if (formato === 'pdf' || formato === 'xlsx') {
+        this.inventarioService.exportarReporte(formato, this.historialMovimientos).subscribe(blob => {
+            const a = document.createElement('a');
+            const objectUrl = URL.createObjectURL(blob);
+            a.href = objectUrl;
+            a.download = `reporte_movimientos.${formato}`;
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+        }, error => {
+            console.error('Error al exportar el reporte:', error);
+        });
+    } else {
+        console.error('Formato no soportado');
+    }
+}
+
+  
 }
