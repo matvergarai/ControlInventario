@@ -1,0 +1,20 @@
+<div class="ordenes-container">
+  <h2>Órdenes de Reposición</h2>
+
+  <div *ngIf="ordenesReposicion.length > 0; else noOrdenes">
+    <div class="card-deck">
+      <div class="card" *ngFor="let orden of ordenesReposicion">
+        <div class="card-body">
+          <h5 class="card-title">{{ orden.nombre }}</h5>
+          <p class="card-text">Cantidad: {{ orden.cantidad }}</p>
+          <p class="card-text">Ubicación: {{ orden.ubicacion }}</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-danger mt-3" (click)="eliminarTodasOrdenes()">Eliminar todas las órdenes de reposición</button>
+  </div>
+
+  <ng-template #noOrdenes>
+    <p>No hay órdenes de reposición en este momento.</p>
+  </ng-template>
+</div>

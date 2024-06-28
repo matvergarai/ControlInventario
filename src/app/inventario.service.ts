@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, switchMap, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Articulo } from './model/articulo.model';
-
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +22,21 @@ export class InventarioService {
   }
 
   generarOrdenCompra(ordenCompra: any): Observable<any> {
-    console.log('Sending order data:', ordenCompra);  // Confirm what is being sent
-    return this.http.post(`${this.apiUrl}/generar-orden-compra`, ordenCompra);
+    return this.http.post(`${this.apiUrl}/ordenes-reposicion`, ordenCompra); // Asegúrate de que la ruta sea correcta
   }
 
-  generarOrdenesReposicion(piezas: Articulo[]): Observable<boolean[]> {
-    const observables = piezas.map(pieza => this.generarOrdenCompra(pieza));
-    return forkJoin(observables); // Importa forkJoin desde 'rxjs'
+  obtenerOrdenesReposicion(): Observable<Articulo[]> {
+    return this.http.get<Articulo[]>(`${this.apiUrl}/ordenes-reposicion`);
   }
+
+  agregarOrdenReposicion(orden: Articulo): Observable<any> {
+    return this.http.post(`${this.apiUrl}/ordenes-reposicion`, orden); // Cambia de GET a POST
+  }
+
+  eliminarOrdenesReposicion(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/ordenes-reposicion`);
+  }
+
   obtenerHistorialMovimientos(fechaInicio: string, fechaFin: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/historial-movimientos`);
   }
@@ -46,10 +52,11 @@ export class InventarioService {
   actualizarNivelesStock(id: number, niveles: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/piezas/${id}/niveles-stock`, niveles);
   }
-  seguimientoInventario():Observable<any[]>{
-    return this.http.get<any>(`${this.apiUrl}/seguimiento-inventarios`);
 
+  seguimientoInventario(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/seguimiento-inventarios`);
   }
+
   monitorearStock(): Observable<Articulo[]> {
     return timer(0, 60000).pipe( // Verifica cada minuto
       switchMap(() => this.obtenerNivelesStock())
@@ -75,8 +82,8 @@ export class InventarioService {
   eliminarPieza(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/piezas/${id}`);
   }
+
   obtenerRegistrosAcciones(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/registros-acciones`);
   }
-  
 }

@@ -21,28 +21,29 @@ db.once('open', function() {
 
 // Definición de un modelo para el inventario
 const Pieza = mongoose.model('Pieza', {
-    nombre: String,  // Ensure this field is included
+    nombre: String,
     cantidad: Number,
     descripcion: String,
     numeroSerie: String,
-    ubicacion: String
-});
-app.get('/api/piezas/bajo-stock', (req, res) => {
-    Pieza.find({ cantidad: { $lt: 10 } }) // Example: finding pieces with stock less than 10
-        .then(piezas => {
-            res.json(piezas);
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message });
-        });
+    ubicacion: String,
+    ordenReposicionPendiente: { type: Boolean, default: false }
 });
 
-// Ruta para obtener las alertas de stock bajo
-app.get('/api/alertas-stock-bajo', (req, res) => {
-    AlertaStockBajo.find({}, (err, alertas) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(200).json(alertas);
-    });
+const OrdenReposicion = mongoose.model('OrdenReposicion', {
+    nombre: String,
+    cantidad: Number,
+    ubicacion: String,
+    fechaOrden: Date,
+    estado: String
+});
+
+// Definición de un modelo para los movimientos de inventario
+const MovimientoInventario = mongoose.model('MovimientoInventario', {
+    pieza: { type: mongoose.Schema.Types.ObjectId, ref: 'Pieza' },
+    fecha: Date,
+    descripcion: String,
+    tipo: String,
+    cantidad: Number
 });
 
 // Ruta para obtener todas las piezas en el inventario
@@ -56,20 +57,121 @@ app.get('/api/piezas', (req, res) => {
         });
 });
 
-// Ruta para obtener las alertas de stock bajo
-app.get('/api/alertas-stock-bajo', (req, res) => {
-    AlertaStockBajo.find({}, (err, alertas) => {
-        if (err) return res.status(500).send(err);
-        res.status(200).send(alertas);
-    });
+// Ruta para registrar una nueva pieza en el inventario
+app.post('/api/piezas', (req, res) => {
+    const nuevaPieza = new Pieza(req.body);
+    nuevaPieza.save()
+        .then(piezaGuardada => {
+            res.status(201).send(piezaGuardada);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        });
 });
 
-app.post('/api/reabastecer', (req, res) => {
-    // Implement your logic here
-    // For example, update the stock quantity in the database
-    const { almacen, cantidad } = req.body; // Assuming 'almacen' and 'cantidad' are passed in the request body
+// Ruta para actualizar una pieza en el inventario
+app.put('/api/piezas/:id', (req, res) => {
+    const piezaId = req.params.id;
+    const actualizaciones = req.body;
 
-    // Example logic to update stock
+    Pieza.findByIdAndUpdate(piezaId, actualizaciones, { new: true })
+        .then(piezaActualizada => {
+            if (!piezaActualizada) {
+                return res.status(404).send({ message: 'Pieza no encontrada' });
+            }
+            res.status(200).send(piezaActualizada);
+        })
+        .catch(err => {
+            res.status(500).send({ error: err.message });
+        });
+});
+
+// Ruta para eliminar una pieza en el inventario
+app.delete('/api/piezas/:id', (req, res) => {
+    const piezaId = req.params.id;
+
+    Pieza.findByIdAndDelete(piezaId)
+        .then(piezaEliminada => {
+            if (!piezaEliminada) {
+                return res.status(404).send({ message: 'Pieza no encontrada' });
+            }
+            res.status(200).send({ message: 'Pieza eliminada correctamente' });
+        })
+        .catch(err => {
+            res.status(500).send({ error: err.message });
+        });
+});
+
+// Ruta para obtener piezas con bajo stock
+app.get('/api/piezas/bajo-stock', (req, res) => {
+    Pieza.find({ cantidad: { $lt: 10 }, ordenReposicionPendiente: { $ne: true } })
+        .then(piezas => {
+            res.json(piezas);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message });
+        });
+});
+
+// Ruta para obtener todas las órdenes de reposición
+app.get('/api/ordenes-reposicion', (req, res) => {
+    OrdenReposicion.find({})
+        .then(ordenes => {
+            res.status(200).send(ordenes);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        });
+});
+
+// Ruta para agregar una nueva orden de reposición
+app.post('/api/ordenes-reposicion', async (req, res) => {
+    console.log('Received data for order:', req.body);
+    const { idPieza, cantidadRequerida } = req.body;
+
+    try {
+        const pieza = await Pieza.findById(idPieza);
+        if (!pieza) {
+            return res.status(404).send({ message: 'Pieza no encontrada' });
+        }
+
+        // Crear la nueva orden de reposición
+        const nuevaOrdenCompra = {
+            nombre: pieza.nombre,
+            cantidad: cantidadRequerida,
+            ubicacion: pieza.ubicacion,
+            fechaOrden: new Date(),
+            estado: 'Pendiente'
+        };
+
+        // Guardar la orden de reposición
+        const ordenGuardada = new OrdenReposicion(nuevaOrdenCompra);
+        await ordenGuardada.save();
+
+        // Actualizar el estado de la pieza
+        pieza.ordenReposicionPendiente = true;
+        await pieza.save();
+
+        res.status(201).send({ success: true, ordenCompra: nuevaOrdenCompra });
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Ruta para eliminar todas las órdenes de reposición
+app.delete('/api/ordenes-reposicion', async (req, res) => {
+    try {
+        await OrdenReposicion.deleteMany({});
+        res.status(200).send({ success: true, message: 'Todas las órdenes de reposición han sido eliminadas' });
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Ruta para reabastecer stock
+app.post('/api/reabastecer', (req, res) => {
+    const { almacen, cantidad } = req.body;
+
     Pieza.updateOne({ ubicacion: almacen }, { $inc: { cantidad: cantidad } })
         .then(result => {
             if (result.modifiedCount === 0) {
@@ -82,47 +184,7 @@ app.post('/api/reabastecer', (req, res) => {
         });
 });
 
-// Ruta para generar una orden de reposición basada en una alerta de stock bajo
-app.post('/api/generar-orden-reposicion', (req, res) => {
-    // Aquí puedes implementar la lógica para generar la orden de reposición
-    // Recibe los datos de la alerta de stock bajo en req.body
-    // Realiza las acciones necesarias y devuelve una respuesta adecuada
-    res.status(200).send({ success: true, message: 'Orden de reposición generada correctamente' });
-});
-
-// Ruta para generar una orden de compra
-// Ruta para generar una orden de compra
-app.post('/api/generar-orden-compra', async (req, res) => {
-    console.log('Received data for order:', req.body);
-    const { idPieza, cantidadRequerida } = req.body;
-
-    try {
-        const pieza = await Pieza.findById(idPieza);
-        if (!pieza) {
-            return res.status(404).send({ message: 'Pieza no encontrada' });
-        }
-        const nuevaOrdenCompra = {
-            pieza: pieza.nombre,
-            cantidad: cantidadRequerida,
-            fechaOrden: new Date(),
-            estado: 'Pendiente'
-        };
-        res.status(201).send({ success: true, ordenCompra: nuevaOrdenCompra });
-    } catch (err) {
-        res.status(500).send({ error: err.message });
-    }
-});
-
-// Definición de un modelo para el historial de movimientos del inventario
-const MovimientoInventario = mongoose.model('MovimientoInventario', {
-    descripcion: String,
-    fecha: Date,
-    tipo: String,
-    cantidad: Number,
-    pieza: { type: mongoose.Schema.Types.ObjectId, ref: 'Pieza' } // Referencia a la pieza
-    
-});
-
+// Ruta para obtener el historial de movimientos del inventario
 // Ruta para obtener el historial de movimientos del inventario
 app.get('/api/historial-movimientos', (req, res) => {
     MovimientoInventario.find({})
@@ -156,31 +218,7 @@ app.post('/api/registrar-movimiento', (req, res) => {
         });
 });
 
-// Ruta para registrar una nueva pieza en el inventario
-// Ruta para obtener todas las piezas en el inventario
-app.get('/api/piezas', (req, res) => {
-    Pieza.find({}, (err, piezas) => {
-        if (err) return res.status(500).send(err);
-        if (piezas.length === 0) {
-            return res.status(404).send('No hay Piezas');
-        }
-        res.status(200).send(piezas);
-    });
-});
-
-// Ruta para registrar una nueva pieza en el inventario
-app.post('/api/piezas', (req, res) => {
-    const nuevaPieza = new Pieza(req.body);
-    nuevaPieza.save()
-        .then(piezaGuardada => {
-            res.status(201).send(piezaGuardada);
-        })
-        .catch(err => {
-            res.status(500).send(err);
-        });
-});
-
-// Ruta para exportar datos a PDF
+// Ruta para exportar datos a PDF o Excel
 app.post('/api/exportar-reporte', (req, res) => {
     const { formato, datos } = req.body;
 
@@ -234,38 +272,6 @@ app.post('/api/exportar-reporte', (req, res) => {
     } else {
         res.status(400).send({ error: 'Formato no soportado' });
     }
-});
-
-// Ruta para actualizar una pieza en el inventario
-app.put('/api/piezas/:id', (req, res) => {
-    const piezaId = req.params.id;
-    const actualizaciones = req.body;
-
-    Pieza.findByIdAndUpdate(piezaId, actualizaciones, { new: true })
-        .then(piezaActualizada => {
-            if (!piezaActualizada) {
-                return res.status(404).send({ message: 'Pieza no encontrada' });
-            }
-            res.status(200).send(piezaActualizada);
-        })
-        .catch(err => {
-            res.status(500).send({ error: err.message });
-        });
-});
-
-app.delete('/api/piezas/:id', (req, res) => {
-    const piezaId = req.params.id;
-
-    Pieza.findByIdAndDelete(piezaId)
-        .then(piezaEliminada => {
-            if (!piezaEliminada) {
-                return res.status(404).send({ message: 'Pieza no encontrada' });
-            }
-            res.status(200).send({ message: 'Pieza eliminada correctamente' });
-        })
-        .catch(err => {
-            res.status(500).send({ error: err.message });
-        });
 });
 
 // Iniciar el servidor

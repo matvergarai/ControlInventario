@@ -20,22 +20,27 @@ export class AlertasStockBajoComponent implements OnInit {
   }
 
   generarOrdenReposicion(articulo: Articulo): void {
-    const ordenCompra = {
-      idPieza: articulo._id,  // Ensure _id is used
-      nombre: articulo.nombre,
-      cantidad: articulo.cantidad,
-      nivelMinimo: articulo.nivelMinimo,
-      ubicacion: articulo.ubicacion,
-    };
-  
-    this.inventarioService.generarOrdenCompra(ordenCompra).subscribe({
-      next: (result) => {
-        console.log('Orden de reposición generada con éxito para', articulo.nombre);
-      },
-      error: (err) => {
-        console.error('Error al generar la orden de reposición para', articulo.nombre, ':', err.message);
-        console.error('Detalles del error:', err);
-      }
-    });
+    const nivelAceptable = 10; // Define el nivel de stock aceptable
+    const cantidadNecesaria = nivelAceptable - articulo.cantidad;
+
+    if (cantidadNecesaria > 0) {
+      const ordenCompra = {
+        idPieza: articulo._id,
+        cantidadRequerida: cantidadNecesaria
+      };
+
+      this.inventarioService.generarOrdenCompra(ordenCompra).subscribe({
+        next: (result) => {
+          console.log('Orden de reposición generada con éxito para', articulo.nombre);
+          this.alertasStockBajo = this.alertasStockBajo.filter(p => p._id !== articulo._id);
+        },
+        error: (err) => {
+          console.error('Error al generar la orden de reposición para', articulo.nombre, ':', err.message);
+          console.error('Detalles del error:', err);
+        }
+      });
+    } else {
+      alert('El stock actual ya es suficiente.');
+    }
   }
 }

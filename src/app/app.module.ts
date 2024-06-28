@@ -18,12 +18,15 @@ import { RegistroInventarioComponent } from './registro-inventario/registro-inve
 import { RegistrosAccionesComponent } from './registros-acciones/registros-acciones.component';
 import { SeguimientoInventariosComponent } from './seguimiento-inventarios/seguimiento-inventarios.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { OrdenesReposicionComponent } from './ordenes-reposicion/ordenes-reposicion.component';
+
 // Definición de las rutas
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'alertas-stock-bajo', component: AlertasStockBajoComponent },
   { path: 'registro-inventario', component: RegistroInventarioComponent },
   { path: 'seguimiento-inventarios', component: SeguimientoInventariosComponent },
+  { path: 'ordenes-reposicion', component: OrdenesReposicionComponent },
   // Puedes agregar más rutas aquí según sea necesario
   // Por ejemplo:
   // { path: 'otra-ruta', component: OtroComponente },
@@ -34,6 +37,7 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     HomeComponent,
+    OrdenesReposicionComponent,
     AlertasStockBajoComponent,
     RegistroInventarioComponent,
     SeguimientoInventariosComponent,
